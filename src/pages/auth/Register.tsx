@@ -11,7 +11,7 @@ export class Register extends Component {
       <Layout>
         <div>
           {/* <div className="login-css bg-slate-50">Login Page</div> */}
-          <div className="flex justify-center pt-10">
+          <div className="flex justify-center">
             <div className="basis-3/4 md:basic-2/4 lg:basis-1/4 bg-slate-50 p-10 rounded-lg drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
               <div className="text-center mt-4">
                 <img

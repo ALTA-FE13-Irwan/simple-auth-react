@@ -12,9 +12,13 @@ export class MyProfile extends Component<Props> {
   render() {
     return (
       <div>
-        <div className="card card-side bg-slate-50 shadow-xl h-96 text-slate-900">
+        <div className="card card-compact md:card-side bg-slate-50 shadow-xl text-slate-900">
           <figure>
-            <img src={this.props.image} alt="Profile Avatar" className="w-96" />
+            <img
+              src={this.props.image}
+              alt="Profile Avatar"
+              className="w-full md:w-96"
+            />
           </figure>
           <div className="card-body">
             <h2 className="card-title">Information About Me</h2>

@@ -26,7 +26,7 @@ export class Profile extends Component<PropsType, StateType> {
   render() {
     return (
       <Layout>
-        <div className="grid-cols-1 p-6 ">
+        <div className="grid-cols-1 p-6">
           <MyProfile
             image={this.state.data.image}
             first_name={this.state.data.first_name}

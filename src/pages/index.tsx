@@ -51,9 +51,9 @@ export class index extends Component<PropsType, StateType> {
   render() {
     return (
       <Layout>
-        <div className="grid gap-3 md:gap-6 grid-cols-2 md:grid-cols-4 lg:grid-cols-6 p-3 justify-items-center">
+        <div className="grid gap-y-6 gap-x-1 md:gap-y-10 grid-cols-2 md:grid-cols-4 lg:grid-cols-6 pb-10 justify-items-center">
           {this.state.loading ? (
-            <div>wait</div>
+            <div className="h-screen">wait</div>
           ) : (
             this.state.datas.map((data) => {
               return (

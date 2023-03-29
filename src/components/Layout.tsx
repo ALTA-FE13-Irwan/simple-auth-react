@@ -9,9 +9,11 @@ interface Props {
 export class Layout extends Component<Props> {
   render() {
     return (
-      <div className="w-full h-full bg-gradient-to-r from-cyan-500 to-blue-500 pb-20">
+      <div className="static w-full h-full h-screen  bg-gradient-to-r from-cyan-500 to-blue-500 ">
         <MyNavbar />
-        <div>{this.props.children}</div>
+        <div className="bg-gradient-to-r from-cyan-500 to-blue-500">
+          {this.props.children}
+        </div>
       </div>
     );
   }

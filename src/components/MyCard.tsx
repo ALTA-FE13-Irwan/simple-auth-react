@@ -6,6 +6,7 @@ interface Props {
   first_name: string;
   last_name: string;
   username: string;
+  label: string;
 }
 
 export class MyCard extends Component<Props> {
@@ -27,7 +28,7 @@ export class MyCard extends Component<Props> {
             {this.props.username}{" "}
           </h5>
           <div className="card-actions mt-0 pt-2">
-            <Button>detail</Button>
+            <Button label={this.props.label} />
           </div>
         </div>
       </div>

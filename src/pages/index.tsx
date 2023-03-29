@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import Layout from "../components/Layout";
-import MyCard from "../components/MyCard";
+import Layout from "@/components/Layout";
+import MyCard from "@/components/MyCard";
 
-import { UserType } from "../utils/types/user";
+import { UserType } from "@/utils/types/user";
+import axios from "axios";
 
 interface PropsType {}
 
@@ -28,30 +29,24 @@ export class index extends Component<PropsType, StateType> {
   }
 
   fetchData() {
-    let tempData: UserType[] = [];
-    for (let i = 0; i < 12; i++) {
-      const obj = {
-        id: i,
-        first_name: "Irwan",
-        last_name: "FicoFar",
-        username: `irwan_Fico${i}`,
-        image: "/avatar.jpg",
-      };
-      tempData.push(obj);
-    }
-
-    setTimeout(() => {
-      this.setState({
-        datas: tempData,
-        loading: false,
+    axios
+      .get("users")
+      .then((response) => {
+        const { data } = response.data;
+        this.setState({ datas: data });
+      })
+      .catch((error) => {
+        alert(error.toString());
+      })
+      .finally(() => {
+        this.setState({ loading: false });
       });
-    }, 2000);
   }
 
   render() {
     return (
       <Layout>
-        <div className="grid gap-y-6 gap-x-1 md:gap-y-10 grid-cols-2 md:grid-cols-4 lg:grid-cols-6 pb-10 justify-items-center">
+        <div className="grid gap-y-6 gap-x-1 md:gap-y-10 grid-cols-2 md:grid-cols-4 lg:grid-cols-6 pb-10 justify-items-center pt-10">
           {this.state.loading ? (
             <div className="h-screen">wait</div>
           ) : (
@@ -63,6 +58,7 @@ export class index extends Component<PropsType, StateType> {
                   last_name={data.last_name}
                   username={data.username}
                   image={data.image}
+                  label="detail"
                 />
               );
             })

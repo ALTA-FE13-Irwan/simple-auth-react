@@ -5,7 +5,7 @@ export class MyNavbar extends Component {
     return (
       <div className="navbar bg-slate-50 shadow-lg py-6 md:py-8 text-slate-700">
         <div className="flex-1 px-2 lg:flex-none">
-          <a className="text-lg font-bold  md:text-4xl">NAVBAR</a>
+          <a className="text-lg font-bold  md:text-3xl">NAVBAR</a>
         </div>
         <div className="flex justify-end flex-1 px-2">
           <div className="flex items-stretch">

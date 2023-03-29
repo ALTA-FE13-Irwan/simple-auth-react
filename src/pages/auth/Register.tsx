@@ -1,18 +1,68 @@
-import React, { Component } from "react";
+import React, { Component, FormEvent } from "react";
+import axios from "axios";
 
-import Layout from "../../components/Layout";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
-import account from "../../assets/account.png";
+import Layout from "@/components/Layout";
+import { Input } from "@/components/Input";
+import Button from "@/components/Button";
+import account from "@/assets/account.png";
 
-export class Register extends Component {
+interface PropsType {}
+
+interface StateType {
+  username: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+}
+
+export class Register extends Component<PropsType, StateType> {
+  constructor(props: PropsType) {
+    super(props);
+    this.state = {
+      username: "",
+      password: "",
+      first_name: "",
+      last_name: "",
+    };
+  }
+
+  handleSubmit(event: FormEvent<HTMLFormElement>) {
+    const { username, password, first_name, last_name } = this.state;
+    event.preventDefault();
+    const body = {
+      username: username,
+      password: password,
+      first_name: first_name,
+      last_name: last_name,
+    };
+    axios
+      .post("register", body)
+      .then((response) => {
+        const { data } = response;
+        console.log(data);
+        alert(data.message.toString());
+      })
+      .catch((error) => {
+        alert(error.toString());
+      })
+      .finally(() => {
+        this.setState({
+          username: "",
+          password: "",
+          first_name: "",
+          last_name: "",
+        });
+        window.location.reload();
+      });
+  }
+
   render() {
     return (
       <Layout>
         <div>
           {/* <div className="login-css bg-slate-50">Login Page</div> */}
           <div className="flex justify-center">
-            <div className="basis-3/4 md:basic-2/4 lg:basis-1/4 bg-slate-50 p-10 rounded-lg drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
+            <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 p-10 rounded-lg drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
               <div className="text-center mt-4">
                 <img
                   src="/user.png"
@@ -23,16 +73,57 @@ export class Register extends Component {
                   register
                 </h1>
               </div>
-              <form className="mt-6">
-                <Input type="user" placeholder="Input user name" />
-                <Input type="password" placeholder="Input Password" />
+              <form
+                className="mt-6"
+                onSubmit={(event) => this.handleSubmit(event)}
+              >
+                <Input
+                  type="user"
+                  placeholder="Input user name"
+                  id="input-unname"
+                  onChange={(event) =>
+                    this.setState({ username: event.target.value })
+                  }
+                />
+                <Input
+                  type="password"
+                  placeholder="Input Password"
+                  id="input-password"
+                  onChange={(event) =>
+                    this.setState({ password: event.target.value })
+                  }
+                />
 
                 <div className="grid grid-cols-2 gap-4">
-                  <Input type="user" placeholder="First Name" />
-                  <Input type="user" placeholder="Last Name" />
+                  <Input
+                    type="user"
+                    placeholder="First Name"
+                    id="input-first_name"
+                    onChange={(event) =>
+                      this.setState({ first_name: event.target.value })
+                    }
+                  />
+                  <Input
+                    type="user"
+                    placeholder="Last Name"
+                    id="input-last_name"
+                    onChange={(event) =>
+                      this.setState({ last_name: event.target.value })
+                    }
+                  />
                 </div>
-                <div className="">
-                  <Button>sign in</Button>
+                <div className="mt-10">
+                  <Button
+                    type="submit"
+                    label="submit"
+                    id="button-register"
+                    disabled={
+                      this.state.username === "" ||
+                      this.state.password === "" ||
+                      this.state.first_name === "" ||
+                      this.state.last_name === ""
+                    }
+                  />
                 </div>
               </form>
             </div>

@@ -19,7 +19,7 @@ export class MyProfile extends Component<Props> {
             <img
               src={this.props.image}
               alt="Profile Avatar"
-              className="w-full md:w-96 hover:scale-105 duration-300"
+              className="w-full h-full md:w-96 hover:scale-105 duration-300"
             />
           </figure>
           <div className="card-body">

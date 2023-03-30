@@ -4,9 +4,9 @@ import axios from "axios";
 import Layout from "@/components/Layout";
 import { Input } from "@/components/Input";
 import Button from "@/components/Button";
-import account from "@/assets/account.png";
+import withRouter, { NavigateParam } from "@/utils/navigation";
 
-interface PropsType {}
+interface PropsType extends NavigateParam {}
 
 interface StateType {
   username: string;
@@ -40,7 +40,8 @@ export class Register extends Component<PropsType, StateType> {
       .then((response) => {
         const { data } = response;
         console.log(data);
-        alert(data.message.toString());
+        alert(data.message);
+        this.props.navigate("/login");
       })
       .catch((error) => {
         alert(error.toString());
@@ -60,12 +61,11 @@ export class Register extends Component<PropsType, StateType> {
     return (
       <Layout>
         <div>
-          {/* <div className="login-css bg-slate-50">Login Page</div> */}
           <div className="flex justify-center">
-            <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 p-10 rounded-lg drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
+            <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 p-10 rounded-2xl drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
               <div className="text-center mt-4">
                 <img
-                  src="/user.png"
+                  src="/order.png"
                   alt="register image"
                   className="mx-auto w-24 md:w-28 md:block "
                 />
@@ -134,4 +134,4 @@ export class Register extends Component<PropsType, StateType> {
   }
 }
 
-export default Register;
+export default withRouter(Register);

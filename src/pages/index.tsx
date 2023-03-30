@@ -4,6 +4,7 @@ import MyCard from "@/components/MyCard";
 
 import { UserType } from "@/utils/types/user";
 import axios from "axios";
+import Loading from "@/components/Loading";
 
 interface PropsType {}
 
@@ -46,9 +47,9 @@ export class index extends Component<PropsType, StateType> {
   render() {
     return (
       <Layout>
-        <div className="grid gap-y-6 gap-x-1 md:gap-y-10 grid-cols-2 md:grid-cols-4 lg:grid-cols-6 pb-10 justify-items-center pt-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-y-6 gap-x-1 md:gap-y-10 pb-10 justify-items-center pt-10 relative">
           {this.state.loading ? (
-            <div className="h-screen">wait</div>
+            <Loading />
           ) : (
             this.state.datas.map((data) => {
               return (

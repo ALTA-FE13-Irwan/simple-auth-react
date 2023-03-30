@@ -1,13 +1,13 @@
 import { Component, FormEvent } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 import Button from "@/components/Button";
 import { Input } from "@/components/Input";
 import Layout from "@/components/Layout";
+import withRouter, { NavigateParam } from "@/utils/navigation";
 
-import "@/styles/Login.css";
-
-interface PropsType {}
+interface PropsType extends NavigateParam {}
 
 interface StateType {
   username: string;
@@ -37,7 +37,8 @@ export class Login extends Component<PropsType, StateType> {
       .then((response) => {
         const { data } = response;
         console.log(data);
-        alert(data.message.toString());
+        alert(data.message);
+        this.props.navigate("/");
       })
       .catch((error) => {
         alert(error.toString());
@@ -55,7 +56,7 @@ export class Login extends Component<PropsType, StateType> {
     return (
       <Layout>
         <div className="flex justify-center pt-1 md:pt-10">
-          <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 p-10 rounded-lg drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
+          <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 p-10 rounded-2xl drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
             <div className="text-center mt-4">
               <img
                 src="/login.png"
@@ -97,6 +98,15 @@ export class Login extends Component<PropsType, StateType> {
                   }
                 />
               </div>
+              <div className="flex justify-center mt-5">
+                <p className="text-slate-500">
+                  don't have an account?{" "}
+                  <Link to={"/register"} className="text-cyan-400/100">
+                    {" "}
+                    Sign Up
+                  </Link>
+                </p>
+              </div>
             </form>
           </div>
         </div>
@@ -105,4 +115,4 @@ export class Login extends Component<PropsType, StateType> {
   }
 }
 
-export default Login;
+export default withRouter(Login);

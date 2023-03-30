@@ -6,8 +6,10 @@ import { MyProfile } from "@/components/MyProfile";
 import { UserEdit } from "@/utils/types/user";
 import { Input } from "@/components/Input";
 import Button from "@/components/Button";
+import withRouter, { NavigateParam } from "@/utils/navigation";
+import Loading from "@/components/Loading";
 
-interface PropsType {}
+interface PropsType extends NavigateParam {}
 
 interface StateType {
   data: Partial<UserEdit>;
@@ -34,6 +36,7 @@ export class Profile extends Component<PropsType, StateType> {
   }
 
   fetchData() {
+    const { username } = this.props.params;
     axios
       .get("users/testing")
       .then((response) => {
@@ -82,7 +85,7 @@ export class Profile extends Component<PropsType, StateType> {
   render() {
     return (
       <Layout>
-        <div className="grid-cols-1 p-6">
+        <div className="grid-cols-1 py-6 px-5 md:px-10 md:py-16 justify-items-center">
           {this.state.isEdit ? (
             <div>
               <input type="checkbox" id="my-modal-3" className="modal-toggle" />
@@ -171,26 +174,32 @@ export class Profile extends Component<PropsType, StateType> {
           ) : (
             <></>
           )}
-          <MyProfile
-            image={this.state.image}
-            first_name={this.state.data.first_name}
-            last_name={this.state.data.last_name}
-            username={this.state.data.username}
-            onClick={this.handleEditMode}
-            modal={
-              <label
-                htmlFor="my-modal-3"
-                className="h-full border-none btn px-12 bg-gradient-to-r from-cyan-500 to-blue-500 hover:-translate-y-0.5 hover:scale-105 hover:drop-shadow-md duration-300 hover:bg-gradient-to-t from-blue-500 to-cyan-400 text-slate-50 uppercase font-bold mt-2 mb-2 p-3 w-full text-base tracking-wider"
-                onClick={this.handleEditMode}
-              >
-                EDIT
-              </label>
-            }
-          />
+          {this.state.loading ? (
+            <div className=" flex justify-center">
+              <Loading />
+            </div>
+          ) : (
+            <MyProfile
+              image={this.state.image}
+              first_name={this.state.data.first_name}
+              last_name={this.state.data.last_name}
+              username={this.state.data.username}
+              onClick={this.handleEditMode}
+              modal={
+                <label
+                  htmlFor="my-modal-3"
+                  className="h-full border-none btn px-12 bg-gradient-to-r from-cyan-500 to-blue-500 hover:-translate-y-0.5 hover:scale-105 hover:drop-shadow-md duration-300 hover:bg-gradient-to-t from-blue-500 to-cyan-400 text-slate-50 uppercase font-bold mt-2 mb-2 p-3 w-full text-base tracking-wider"
+                  onClick={this.handleEditMode}
+                >
+                  EDIT
+                </label>
+              }
+            />
+          )}
         </div>
       </Layout>
     );
   }
 }
 
-export default Profile;
+export default withRouter(Profile);

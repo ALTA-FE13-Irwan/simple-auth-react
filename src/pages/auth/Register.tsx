@@ -1,137 +1,137 @@
-import React, { Component, FormEvent } from "react";
+import React, { FC, FormEvent, useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import Layout from "@/components/Layout";
 import { Input } from "@/components/Input";
 import Button from "@/components/Button";
-import withRouter, { NavigateParam } from "@/utils/navigation";
+import { Link } from "react-router-dom";
+import { RegisterFormData } from "@/utils/types/user";
+import { useTitle } from "@/utils/hooks";
 
-interface PropsType extends NavigateParam {}
+const Register: FC = () => {
+  const [objSubmit, setObjSubmit] = useState<RegisterFormData>({
+    username: "",
+    password: "",
+    first_name: "",
+    last_name: "",
+  });
+  const [isEmpty, setIsEmpty] = useState(true);
+  const navigate = useNavigate();
 
-interface StateType {
-  username: string;
-  password: string;
-  first_name: string;
-  last_name: string;
-}
+  useTitle("Register | User Management");
 
-export class Register extends Component<PropsType, StateType> {
-  constructor(props: PropsType) {
-    super(props);
-    this.state = {
-      username: "",
-      password: "",
-      first_name: "",
-      last_name: "",
-    };
-  }
+  useEffect(() => {
+    setIsEmpty(Object.values(objSubmit).every((val) => val === ""));
+  }, [objSubmit]);
 
-  handleSubmit(event: FormEvent<HTMLFormElement>) {
-    const { username, password, first_name, last_name } = this.state;
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const body = {
-      username: username,
-      password: password,
-      first_name: first_name,
-      last_name: last_name,
-    };
+
+    if (
+      objSubmit.username === "" ||
+      objSubmit.password === "" ||
+      objSubmit.first_name === "" ||
+      objSubmit.last_name === ""
+    ) {
+      alert("Please fill all required!!");
+      return;
+    }
+
     axios
-      .post("register", body)
+      .post("register", objSubmit)
       .then((response) => {
         const { data } = response;
         console.log(data);
         alert(data.message);
-        this.props.navigate("/login");
+        navigate("/login");
       })
       .catch((error) => {
         alert(error.toString());
       })
-      .finally(() => {
-        this.setState({
-          username: "",
-          password: "",
-          first_name: "",
-          last_name: "",
-        });
-        window.location.reload();
-      });
-  }
+      .finally(() => {});
+  };
 
-  render() {
-    return (
-      <Layout>
-        <div>
-          <div className="flex justify-center">
-            <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 p-10 rounded-2xl drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
-              <div className="text-center mt-4">
-                <img
-                  src="/order.png"
-                  alt="register image"
-                  className="mx-auto w-24 md:w-28 md:block "
-                />
-                <h1 className="font-bold text-2xl md:text-3xl mt-3 uppercase ">
-                  register
-                </h1>
-              </div>
-              <form
-                className="mt-6"
-                onSubmit={(event) => this.handleSubmit(event)}
-              >
+  return (
+    <Layout>
+      <div>
+        <div className="flex justify-center">
+          <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 p-10 rounded-2xl drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
+            <div className="text-center mt-4">
+              <img
+                src="/order.png"
+                alt="register image"
+                className="mx-auto w-24 md:w-28 md:block "
+              />
+              <h1 className="font-bold text-2xl md:text-3xl mt-3 uppercase ">
+                register
+              </h1>
+            </div>
+            <form className="mt-6" onSubmit={(event) => handleSubmit(event)}>
+              <Input
+                type="user"
+                placeholder="Input user name"
+                id="input-unname"
+                onChange={(event) =>
+                  setObjSubmit({ ...objSubmit, username: event.target.value })
+                }
+              />
+              <Input
+                type="password"
+                placeholder="Input Password"
+                id="input-password"
+                onChange={(event) =>
+                  setObjSubmit({ ...objSubmit, password: event.target.value })
+                }
+              />
+
+              <div className="grid grid-cols-2 gap-4">
                 <Input
                   type="user"
-                  placeholder="Input user name"
-                  id="input-unname"
+                  placeholder="First Name"
+                  id="input-first_name"
                   onChange={(event) =>
-                    this.setState({ username: event.target.value })
+                    setObjSubmit({
+                      ...objSubmit,
+                      first_name: event.target.value,
+                    })
                   }
                 />
                 <Input
-                  type="password"
-                  placeholder="Input Password"
-                  id="input-password"
+                  type="user"
+                  placeholder="Last Name"
+                  id="input-last_name"
                   onChange={(event) =>
-                    this.setState({ password: event.target.value })
+                    setObjSubmit({
+                      ...objSubmit,
+                      last_name: event.target.value,
+                    })
                   }
                 />
-
-                <div className="grid grid-cols-2 gap-4">
-                  <Input
-                    type="user"
-                    placeholder="First Name"
-                    id="input-first_name"
-                    onChange={(event) =>
-                      this.setState({ first_name: event.target.value })
-                    }
-                  />
-                  <Input
-                    type="user"
-                    placeholder="Last Name"
-                    id="input-last_name"
-                    onChange={(event) =>
-                      this.setState({ last_name: event.target.value })
-                    }
-                  />
-                </div>
-                <div className="mt-10">
-                  <Button
-                    type="submit"
-                    label="submit"
-                    id="button-register"
-                    disabled={
-                      this.state.username === "" ||
-                      this.state.password === "" ||
-                      this.state.first_name === "" ||
-                      this.state.last_name === ""
-                    }
-                  />
-                </div>
-              </form>
-            </div>
+              </div>
+              <div className="mt-10">
+                <Button
+                  type="submit"
+                  label="submit"
+                  id="button-register"
+                  disabled={isEmpty}
+                />
+              </div>
+              <div className="flex justify-center mt-5">
+                <p className="text-slate-500">
+                  already have account ?{" "}
+                  <Link to={"/login"} className="text-cyan-400/100">
+                    {" "}
+                    Login
+                  </Link>
+                </p>
+              </div>
+            </form>
           </div>
         </div>
-      </Layout>
-    );
-  }
-}
+      </div>
+    </Layout>
+  );
+};
 
-export default withRouter(Register);
+export default Register;

@@ -1,118 +1,103 @@
-import { Component, FormEvent } from "react";
+import { FC, FormEvent, useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import Button from "@/components/Button";
 import { Input } from "@/components/Input";
 import Layout from "@/components/Layout";
-import withRouter, { NavigateParam } from "@/utils/navigation";
+import { LoginFormData } from "@/utils/types/user";
+import { useTitle } from "@/utils/hooks";
 
-interface PropsType extends NavigateParam {}
+const Login: FC = () => {
+  const [objSubmit, setObjSubmit] = useState<LoginFormData>({
+    username: "",
+    password: "",
+  });
+  const [isEmpty, setIsEmpty] = useState(true);
+  const navigate = useNavigate();
 
-interface StateType {
-  username: string;
-  password: string;
-  loading: boolean;
-}
+  useTitle("Login | User Management");
 
-export class Login extends Component<PropsType, StateType> {
-  constructor(props: PropsType) {
-    super(props);
-    this.state = {
-      username: "",
-      password: "",
-      loading: false,
-    };
-  }
+  useEffect(() => {
+    setIsEmpty(Object.values(objSubmit).every((val) => val === ""));
+  }, [objSubmit]);
 
-  handleSubmit(event: FormEvent<HTMLFormElement>) {
-    const { username, password } = this.state;
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const body = {
-      username: username,
-      password: password,
-    };
+
+    if (objSubmit.username === "" || objSubmit.password === "") {
+      alert("Please enter your username and password.");
+      return;
+    }
+
     axios
-      .post("login", body)
+      .post("login", objSubmit)
       .then((response) => {
         const { data } = response;
         console.log(data);
         alert(data.message);
-        this.props.navigate("/");
+        navigate("/");
       })
       .catch((error) => {
         alert(error.toString());
       })
-      .finally(() => {
-        this.setState({
-          username: "",
-          password: "",
-        });
-        window.location.reload();
-      });
-  }
+      .finally(() => {});
+  };
 
-  render() {
-    return (
-      <Layout>
-        <div className="flex justify-center pt-1 md:pt-10">
-          <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 p-10 rounded-2xl drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
-            <div className="text-center mt-4">
-              <img
-                src="/login.png"
-                alt=""
-                className="mx-auto w-24 md:w-28 md:block "
-              />
-              <h1 className="font-bold text-2xl md:text-3xl mt-3 uppercase ">
-                login page
-              </h1>
-            </div>
-            <form
-              className="mt-6"
-              onSubmit={(event) => this.handleSubmit(event)}
-            >
-              <p className="text-slate-500 ">Login to your account</p>
-              <Input
-                type="user"
-                placeholder="Input user name"
-                id="input-unname"
-                onChange={(event) =>
-                  this.setState({ username: event.target.value })
-                }
-              />
-              <Input
-                type="password"
-                placeholder="Input password"
-                id="input-password"
-                onChange={(event) =>
-                  this.setState({ password: event.target.value })
-                }
-              />
-              <div className="mt-10">
-                <Button
-                  label="sign in"
-                  id="button-login"
-                  type="submit"
-                  disabled={
-                    this.state.username === "" || this.state.password === ""
-                  }
-                />
-              </div>
-              <div className="flex justify-center mt-5">
-                <p className="text-slate-500">
-                  don't have an account?{" "}
-                  <Link to={"/register"} className="text-cyan-400/100">
-                    {" "}
-                    Sign Up
-                  </Link>
-                </p>
-              </div>
-            </form>
+  return (
+    <Layout>
+      <div className="flex justify-center pt-1 md:pt-10">
+        <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 p-10 rounded-2xl drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
+          <div className="text-center mt-4">
+            <img
+              src="/login.png"
+              alt=""
+              className="mx-auto w-24 md:w-28 md:block "
+            />
+            <h1 className="font-bold text-2xl md:text-3xl mt-3 uppercase ">
+              login page
+            </h1>
           </div>
+          <form className="mt-6" onSubmit={(event) => handleSubmit(event)}>
+            <p className="text-slate-500 ">Login to your account</p>
+            <Input
+              type="user"
+              placeholder="Input user name"
+              id="input-unname"
+              onChange={(event) =>
+                setObjSubmit({ ...objSubmit, username: event.target.value })
+              }
+            />
+            <Input
+              type="password"
+              placeholder="Input password"
+              id="input-password"
+              onChange={(event) =>
+                setObjSubmit({ ...objSubmit, password: event.target.value })
+              }
+            />
+            <div className="mt-10">
+              <Button
+                label="sign in"
+                id="button-login"
+                type="submit"
+                disabled={isEmpty}
+              />
+            </div>
+            <div className="flex justify-center mt-5">
+              <p className="text-slate-500">
+                don't have an account?{" "}
+                <Link to={"/register"} className="text-cyan-400/100">
+                  {" "}
+                  Sign Up
+                </Link>
+              </p>
+            </div>
+          </form>
         </div>
-      </Layout>
-    );
-  }
-}
+      </div>
+    </Layout>
+  );
+};
 
-export default withRouter(Login);
+export default Login;

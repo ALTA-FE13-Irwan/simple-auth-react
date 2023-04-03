@@ -1,6 +1,7 @@
 import { FC, FormEvent, useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { useTitle, useFetchGet } from "@/utils/hooks";
 import { MyProfile } from "@/components/MyProfile";
@@ -9,6 +10,7 @@ import { Input } from "@/components/Input";
 import Loading from "@/components/Loading";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
+import { RootState } from "@/utils/types/redux";
 
 const Profile: FC = () => {
   const [data, setData] = useState<Partial<UserEdit>>({});
@@ -16,6 +18,8 @@ const Profile: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const params = useParams();
+  const isLoggedIn = useSelector((state: RootState) => state.data.isLoggedIn);
+  const navigate = useNavigate();
 
   // Side Effect
   useEffect(() => {
@@ -70,9 +74,29 @@ const Profile: FC = () => {
     setIsEdit(!isEdit);
   };
 
+  const showProfile = () => {
+    return (
+      <MyProfile
+        image={data.image}
+        first_name={data.first_name}
+        last_name={data.last_name}
+        username={data.username}
+        onClick={handleEditMode}
+        modal={
+          <label
+            htmlFor="my-modal-3"
+            className="h-full border-none btn px-12 bg-gradient-to-r from-cyan-500 to-blue-500 hover:-translate-y-0.5 hover:scale-105 hover:drop-shadow-md duration-300 hover:bg-gradient-to-t from-blue-500 to-cyan-400 text-slate-50 uppercase font-bold mt-2 mb-2 p-3 w-full text-base tracking-wider"
+          >
+            EDIT
+          </label>
+        }
+      />
+    );
+  };
+
   return (
     <Layout>
-      <div className="grid-cols-1 py-6 px-5 md:px-10 md:py-16 justify-items-center">
+      <div className="grid-cols-1 py-6 px-5 md:px-10 md:py-16 justify-items-center relative">
         {isEdit ? (
           <div>
             <input type="checkbox" id="my-modal-3" className="modal-toggle" />
@@ -160,25 +184,11 @@ const Profile: FC = () => {
           <></>
         )}
         {loading ? (
-          <div className=" flex justify-center">
-            <Loading />
-          </div>
+          <Loading />
+        ) : isLoggedIn ? (
+          showProfile()
         ) : (
-          <MyProfile
-            image={data.image}
-            first_name={data.first_name}
-            last_name={data.last_name}
-            username={data.username}
-            onClick={handleEditMode}
-            modal={
-              <label
-                htmlFor="my-modal-3"
-                className="h-full border-none btn px-12 bg-gradient-to-r from-cyan-500 to-blue-500 hover:-translate-y-0.5 hover:scale-105 hover:drop-shadow-md duration-300 hover:bg-gradient-to-t from-blue-500 to-cyan-400 text-slate-50 uppercase font-bold mt-2 mb-2 p-3 w-full text-base tracking-wider"
-              >
-                EDIT
-              </label>
-            }
-          />
+          <Navigate to="/" />
         )}
       </div>
     </Layout>

@@ -3,7 +3,7 @@ import { FC, ReactNode } from "react";
 import { MyNavbar } from "./Navbar";
 
 interface Props {
-  children: ReactNode;
+  children: any;
 }
 
 const Layout: FC<Props> = (props) => {

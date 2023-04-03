@@ -40,7 +40,7 @@ const Router: FC = () => {
     },
     {
       path: "/profile/:username",
-      element: checktoken ? <Profile /> : <Home />,
+      element: <Profile />,
     },
   ]);
 

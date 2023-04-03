@@ -14,10 +14,11 @@ export const MyNavbar: FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    removeCookie("tkn");
-    removeCookie("uname");
-    alert("you sure to logout");
-    navigate("/");
+    if (confirm("Are You Sure to Logout ?")) {
+      removeCookie("tkn");
+      removeCookie("uname");
+      navigate("/");
+    }
   };
 
   return (

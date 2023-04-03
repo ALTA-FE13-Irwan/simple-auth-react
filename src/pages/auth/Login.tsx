@@ -1,6 +1,8 @@
 import { FC, FormEvent, useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useDispatch } from "react-redux";
 
 import Button from "@/components/Button";
 import { Input } from "@/components/Input";
@@ -15,7 +17,7 @@ const Login: FC = () => {
   });
   const [isEmpty, setIsEmpty] = useState(true);
   const navigate = useNavigate();
-
+  const [, setCookie] = useCookies();
   useTitle("Login | User Management");
 
   useEffect(() => {
@@ -33,9 +35,11 @@ const Login: FC = () => {
     axios
       .post("login", objSubmit)
       .then((response) => {
-        const { data } = response;
-        console.log(data);
-        alert(data.message);
+        const { data, message } = response.data;
+        // console.log(data);
+        setCookie("tkn", data.token);
+        setCookie("uname", data.username);
+        alert(message);
         navigate("/");
       })
       .catch((error) => {

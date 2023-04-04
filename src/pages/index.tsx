@@ -1,21 +1,16 @@
-import React, { Component } from "react";
-import axios from "axios";
 import { FC, useState, useEffect } from "react";
+import axios from "axios";
 
+import { useTitle, useFetchGet } from "@/utils/hooks";
+import { UserType } from "@/utils/types/user";
 import Layout from "@/components/Layout";
 import MyCard from "@/components/MyCard";
 import Loading from "@/components/Loading";
-import { UserType } from "@/utils/types/user";
-import { useTitle, useFetchGet } from "@/utils/hooks";
 
 const Home: FC = () => {
   // constructor
   const [datas, setDatas] = useState<UserType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-
-  // const [data] = useFetchGet(
-  //   "https://virtserver.swaggerhub.com/devanada/hells-kitchen/1.1.0/users"
-  // );
 
   useTitle("Homepage | User Management");
 

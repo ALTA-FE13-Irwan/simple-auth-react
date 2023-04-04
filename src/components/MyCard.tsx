@@ -1,6 +1,7 @@
-import { FC } from "react";
-import Button from "./Button";
 import { Link } from "react-router-dom";
+import { FC } from "react";
+
+import Button from "./Button";
 
 interface Props {
   image: string;

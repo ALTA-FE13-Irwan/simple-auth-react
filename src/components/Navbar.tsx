@@ -1,6 +1,3 @@
-import React, { Component } from "react";
-import withRouter, { NavigateParam } from "@/utils/navigation";
-import { Link, useNavigate } from "react-router-dom";
 import {
   MdAccountCircle,
   MdLogin,
@@ -8,9 +5,11 @@ import {
   MdModeNight,
   MdSunny,
 } from "react-icons/Md";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
 import { FC, useContext } from "react";
+
 import { RootState } from "@/utils/types/redux";
 import { ThemeContext } from "@/utils/context";
 
@@ -89,7 +88,7 @@ export const MyNavbar: FC = () => {
               <li className="hover-bordered">
                 <button
                   onClick={() =>
-                    handleTheme(theme === "dark" ? "light" : "dark")
+                    handleTheme(theme === "light" ? "dark" : "light")
                   }
                   id="btn-dark"
                   className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"

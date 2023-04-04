@@ -12,7 +12,7 @@ import Home from "@/pages";
 import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
 import Profile from "@/pages/Profile";
-import NotFound from "@/pages/NotFound";
+import { MyNotFound } from "@/pages/MyNotFound";
 
 import { handleAuth } from "@/utils/redux/reducer/reducer";
 import { ThemeContext } from "@/utils/context";
@@ -31,7 +31,7 @@ const Router: FC = () => {
     {
       path: "/",
       element: <Home />,
-      errorElement: <NotFound />,
+      errorElement: <MyNotFound />,
     },
     {
       path: "/login",

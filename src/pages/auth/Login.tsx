@@ -1,14 +1,13 @@
 import { FC, FormEvent, useState, useEffect } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { useDispatch } from "react-redux";
+import axios from "axios";
 
-import Button from "@/components/Button";
-import { Input } from "@/components/Input";
-import Layout from "@/components/Layout";
 import { LoginFormData } from "@/utils/types/user";
+import { Input } from "@/components/Input";
 import { useTitle } from "@/utils/hooks";
+import Button from "@/components/Button";
+import Layout from "@/components/Layout";
 
 const Login: FC = () => {
   const [objSubmit, setObjSubmit] = useState<LoginFormData>({
@@ -91,7 +90,11 @@ const Login: FC = () => {
             <div className="flex justify-center mt-5">
               <p className="text-slate-500">
                 don't have an account?{" "}
-                <Link to={"/register"} className="text-cyan-400/100">
+                <Link
+                  to={"/register"}
+                  className="text-cyan-400/100"
+                  id="sign-up"
+                >
                   {" "}
                   Sign Up
                 </Link>

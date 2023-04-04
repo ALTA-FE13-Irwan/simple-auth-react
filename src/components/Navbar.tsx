@@ -1,17 +1,24 @@
-import React, { Component } from "react";
-import withRouter, { NavigateParam } from "@/utils/navigation";
+import {
+  MdAccountCircle,
+  MdLogin,
+  MdLogout,
+  MdModeNight,
+  MdSunny,
+} from "react-icons/Md";
 import { Link, useNavigate } from "react-router-dom";
-import { MdAccountCircle, MdLogin, MdLogout } from "react-icons/Md";
 import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
 import { FC, useContext } from "react";
+
 import { RootState } from "@/utils/types/redux";
+import { ThemeContext } from "@/utils/context";
 
 export const MyNavbar: FC = () => {
   const { isLoggedIn, uname } = useSelector((state: RootState) => state.data);
 
   const [, , removeCookie] = useCookies();
   const navigate = useNavigate();
+  const { theme, setTheme } = useContext(ThemeContext);
 
   const handleLogout = () => {
     if (confirm("Are You Sure to Logout ?")) {
@@ -21,8 +28,13 @@ export const MyNavbar: FC = () => {
     }
   };
 
+  const handleTheme = (mode: string) => {
+    setTheme(mode);
+    console.log(mode);
+  };
+
   return (
-    <div className="navbar bg-slate-50 py-6 md:py-8 text-slate-700">
+    <div className="navbar bg-slate-50 py-6 md:py-8 text-slate-700 dark:bg-slate-800 dark:text-slate-50">
       <div className="flex-1 px-2 lg:flex-none">
         <Link to={"/"}>
           <a className="text-lg font-bold  md:text-2xl">SIMPLE-AUTH-REACT</a>
@@ -49,7 +61,7 @@ export const MyNavbar: FC = () => {
             </label>
             <ul
               tabIndex={0}
-              className="menu dropdown-content p-2 drop-shadow-xl border-2 rounded-box w-52 mt-4 bg-slate-50 "
+              className="menu dropdown-content p-2 drop-shadow-xl border-2 rounded-box w-52 mt-4 bg-slate-50 dark:bg-slate-800 "
             >
               <li className="hover-bordered ">
                 <button
@@ -71,6 +83,22 @@ export const MyNavbar: FC = () => {
                     />
                   </svg>
                   Homepage
+                </button>
+              </li>
+              <li className="hover-bordered">
+                <button
+                  onClick={() =>
+                    handleTheme(theme === "light" ? "dark" : "light")
+                  }
+                  id="btn-dark"
+                  className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"
+                >
+                  {theme === "dark" ? (
+                    <MdModeNight className="h-5 w-5" />
+                  ) : (
+                    <MdSunny className="h-5 w-5" />
+                  )}
+                  {theme} Mode
                 </button>
               </li>
               {isLoggedIn && (
@@ -100,7 +128,7 @@ export const MyNavbar: FC = () => {
                     onClick={() => navigate("/login")}
                     className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"
                   >
-                    <MdLogout className="h-5 w-5" />
+                    <MdLogin className="h-5 w-5" />
                     Login
                   </button>
                 </li>

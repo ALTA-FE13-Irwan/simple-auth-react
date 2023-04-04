@@ -3,14 +3,13 @@ import axios from "axios";
 import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { useTitle, useFetchGet } from "@/utils/hooks";
 import { MyProfile } from "@/components/MyProfile";
+import { RootState } from "@/utils/types/redux";
 import { UserEdit } from "@/utils/types/user";
 import { Input } from "@/components/Input";
 import Loading from "@/components/Loading";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
-import { RootState } from "@/utils/types/redux";
 
 const Profile: FC = () => {
   const [data, setData] = useState<Partial<UserEdit>>({});
@@ -33,8 +32,7 @@ const Profile: FC = () => {
       .then((response) => {
         const { data } = response.data;
         setData(data);
-        // cara ganti title bisa juga dengan cara ini, selain pakai hook seperti contoh di index.tsx
-        document.title = `${data.username} | User Management`;
+        document.title = `${data.username} | User Management`; // cara lain title document selain hook
       })
       .catch((error) => {
         alert(error.toString());
@@ -77,6 +75,7 @@ const Profile: FC = () => {
   const showProfile = () => {
     return (
       <MyProfile
+        key={data.id}
         image={data.image}
         first_name={data.first_name}
         last_name={data.last_name}
@@ -86,6 +85,7 @@ const Profile: FC = () => {
           <label
             htmlFor="my-modal-3"
             className="h-full border-none btn px-12 bg-gradient-to-r from-cyan-500 to-blue-500 hover:-translate-y-0.5 hover:scale-105 hover:drop-shadow-md duration-300 hover:bg-gradient-to-t from-blue-500 to-cyan-400 text-slate-50 uppercase font-bold mt-2 mb-2 p-3 w-full text-base tracking-wider"
+            id="edit"
           >
             EDIT
           </label>
@@ -105,6 +105,7 @@ const Profile: FC = () => {
                 <label
                   htmlFor="my-modal-3"
                   className="btn btn-sm btn-circle absolute right-2 top-2"
+                  id="handle-edit"
                   onClick={handleEditMode}
                 >
                   ✕
@@ -119,6 +120,7 @@ const Profile: FC = () => {
 
                 <form onSubmit={(event) => handleSubmit(event)}>
                   <input
+                    id="img-input"
                     className="file-input file-input-bordered file-input-accent  w-full bg-gradient-to-b from-slate-50 to-slate-100 mt-5 hover:drop-shadow-md "
                     placeholder="Select Image"
                     type="file"
@@ -136,6 +138,7 @@ const Profile: FC = () => {
                     }}
                   />
                   <Input
+                    id="handle-first-name"
                     placeholder="First Name"
                     defaultValue={data.first_name}
                     onChange={(event) =>
@@ -143,6 +146,7 @@ const Profile: FC = () => {
                     }
                   />
                   <Input
+                    id="handle-last-name"
                     placeholder="Last Name"
                     defaultValue={data.last_name}
                     onChange={(event) =>
@@ -150,6 +154,7 @@ const Profile: FC = () => {
                     }
                   />
                   <Input
+                    id="handle-username"
                     placeholder="Username"
                     defaultValue={data.username}
                     onChange={(event) =>
@@ -157,6 +162,7 @@ const Profile: FC = () => {
                     }
                   />
                   <Input
+                    id="handle-password"
                     placeholder="Password"
                     defaultValue={data.password}
                     onChange={(event) =>

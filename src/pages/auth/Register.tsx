@@ -1,13 +1,13 @@
 import React, { FC, FormEvent, useState, useEffect } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-import Layout from "@/components/Layout";
-import { Input } from "@/components/Input";
-import Button from "@/components/Button";
-import { Link } from "react-router-dom";
 import { RegisterFormData } from "@/utils/types/user";
+import { Input } from "@/components/Input";
 import { useTitle } from "@/utils/hooks";
+import { Link } from "react-router-dom";
+import Layout from "@/components/Layout";
+import Button from "@/components/Button";
 
 const Register: FC = () => {
   const [objSubmit, setObjSubmit] = useState<RegisterFormData>({
@@ -56,7 +56,7 @@ const Register: FC = () => {
     <Layout>
       <div>
         <div className="flex justify-center">
-          <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 p-10 rounded-2xl drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
+          <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 dark:bg-slate-800 p-10 rounded-2xl drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
             <div className="text-center mt-4">
               <img
                 src="/order.png"
@@ -120,7 +120,7 @@ const Register: FC = () => {
               <div className="flex justify-center mt-5">
                 <p className="text-slate-500">
                   already have account ?{" "}
-                  <Link to={"/login"} className="text-cyan-400/100">
+                  <Link to={"/login"} className="text-cyan-400/100" id="login">
                     {" "}
                     Login
                   </Link>

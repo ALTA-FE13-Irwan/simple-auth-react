@@ -1,14 +1,13 @@
 import { FC, FormEvent, useState, useEffect } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { useDispatch } from "react-redux";
+import axios from "axios";
 
-import Button from "@/components/Button";
-import { Input } from "@/components/Input";
-import Layout from "@/components/Layout";
 import { LoginFormData } from "@/utils/types/user";
+import { Input } from "@/components/Input";
 import { useTitle } from "@/utils/hooks";
+import Button from "@/components/Button";
+import Layout from "@/components/Layout";
 
 const Login: FC = () => {
   const [objSubmit, setObjSubmit] = useState<LoginFormData>({
@@ -51,7 +50,7 @@ const Login: FC = () => {
   return (
     <Layout>
       <div className="flex justify-center pt-1 md:pt-10">
-        <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 p-10 rounded-2xl drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
+        <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 dark:bg-slate-800 p-10 rounded-2xl drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
           <div className="text-center mt-4">
             <img
               src="/login.png"
@@ -91,7 +90,11 @@ const Login: FC = () => {
             <div className="flex justify-center mt-5">
               <p className="text-slate-500">
                 don't have an account?{" "}
-                <Link to={"/register"} className="text-cyan-400/100">
+                <Link
+                  to={"/register"}
+                  className="text-cyan-400/100"
+                  id="sign-up"
+                >
                   {" "}
                   Sign Up
                 </Link>

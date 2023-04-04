@@ -1,5 +1,6 @@
 import { FC, useState, useEffect } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 import { useTitle, useFetchGet } from "@/utils/hooks";
 import { UserType } from "@/utils/types/user";
@@ -11,6 +12,8 @@ const Home: FC = () => {
   // constructor
   const [datas, setDatas] = useState<UserType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const params = useParams();
 
   useTitle("Homepage | User Management");
 
@@ -35,7 +38,7 @@ const Home: FC = () => {
 
   return (
     <Layout>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-y-6 gap-x-1 md:gap-y-10 pb-10 justify-items-center pt-10 relative">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-y-6 gap-x-1 md:gap-y-10 pb-10 justify-items-center py-10 ">
         {loading ? (
           <Loading />
         ) : (

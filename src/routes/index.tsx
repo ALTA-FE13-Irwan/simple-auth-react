@@ -4,7 +4,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { FC, useState, useMemo, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
@@ -17,13 +17,14 @@ import { NotFound } from "@/pages/NotFound";
 import { handleAuth } from "@/utils/redux/reducer/reducer";
 import { ThemeContext } from "@/utils/context";
 
-axios.defaults.baseURL =
-  "https://virtserver.swaggerhub.com/devanada/hells-kitchen/1.1.0";
+// axios.defaults.baseURL =
+//   "https://virtserver.swaggerhub.com/devanada/hells-kitchen/1.1.0";
+axios.defaults.baseURL = "https://hells-kitchen.onrender.com/api/v1";
 
 const Router: FC = () => {
   const [cookie] = useCookies(["tkn", "uname"]);
   const dispatch = useDispatch();
-  const checktoken = cookie.tkn;
+  const getToken = cookie.tkn;
   const [theme, setTheme] = useState<string>("light");
   const background = useMemo(() => ({ theme, setTheme }), [theme]);
 
@@ -35,11 +36,11 @@ const Router: FC = () => {
     },
     {
       path: "/login",
-      element: checktoken ? <Navigate to="/" /> : <Login />,
+      element: getToken ? <Navigate to="/" /> : <Login />,
     },
     {
       path: "/register",
-      element: checktoken ? <Navigate to="/login" /> : <Register />,
+      element: getToken ? <Navigate to="/login" /> : <Register />,
     },
     {
       path: "/profile/:username",
@@ -48,10 +49,12 @@ const Router: FC = () => {
   ]);
 
   useEffect(() => {
-    if (cookie.tkn) {
-      dispatch(handleAuth({ isLoggedIn: true, uname: cookie.uname }));
+    if (getToken) {
+      dispatch(
+        handleAuth({ isLoggedIn: true, uname: cookie.uname, token: getToken })
+      );
     } else {
-      dispatch(handleAuth({ isLoggedIn: false, uname: "" }));
+      dispatch(handleAuth({ isLoggedIn: false, uname: "", token: "" }));
     }
   }, [cookie]);
 

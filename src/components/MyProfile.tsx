@@ -13,7 +13,7 @@ export const MyProfile: FC<Props> = (props) => {
   const { image, first_name, last_name, username, onClick, modal } = props;
   return (
     <div>
-      <div className="card card-compact md:card-side bg-slate-50 shadow-xl text-slate-900">
+      <div className="card card-compact md:card-side bg-slate-50 dark:bg-slate-800 shadow-xl text-slate-900 dark:text-slate-50">
         <figure>
           <img
             src={image}

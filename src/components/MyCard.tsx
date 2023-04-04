@@ -13,7 +13,7 @@ interface Props {
 const MyCard: FC<Props> = (props) => {
   const { image, username, first_name, last_name, label } = props;
   return (
-    <div className="card card-compact w-5/6 bg-slate-50 shadow-xl text-slate-900 hover:translate-y-0.5 hover:shadow-2xl hover:scale-105 duration-300">
+    <div className="card card-compact w-5/6 bg-slate-50 dark:bg-slate-800 dark:text-slate-50 shadow-xl text-slate-900 hover:translate-y-0.5 hover:shadow-2xl hover:scale-105 duration-300">
       <figure>
         <img
           src={image}

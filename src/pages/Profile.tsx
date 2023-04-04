@@ -2,7 +2,7 @@ import { FC, FormEvent, useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
 import { useCookies } from "react-cookie";
 
 import { MyProfile } from "@/components/MyProfile";
@@ -13,7 +13,7 @@ import Loading from "@/components/Loading";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { Fobidden } from "@/components/Alert";
-import Swal from "@/utils/swal";
+// import Swal from "@/utils/swal";
 
 const Profile: FC = () => {
   const [objSubmit, setObjSubmit] = useState<Partial<UserEdit>>({});
@@ -24,7 +24,7 @@ const Profile: FC = () => {
   const { token, uname } = useSelector((state: RootState) => state.data);
 
   const [, , removeCookie] = useCookies();
-  const MySwal = withReactContent(Swal);
+  // const MySwal = withReactContent(Swal);
   const navigate = useNavigate();
   const params = useParams();
 
@@ -43,7 +43,8 @@ const Profile: FC = () => {
       })
       .catch((error) => {
         const { data } = error.response;
-        MySwal.fire({
+        Swal.fire({
+          icon: "error",
           title: "Failed",
           text: data.message,
           showCancelButton: false,
@@ -75,10 +76,11 @@ const Profile: FC = () => {
       })
       .then((response) => {
         const { message } = response.data;
-        MySwal.fire({
-          title: "Success",
-          text: message,
+        Swal.fire({
+          icon: "success",
+          title: message,
           showCancelButton: false,
+          showConfirmButton: true,
         }).then((result) => {
           if (result.isConfirmed) {
             setIsEdit(false);
@@ -88,7 +90,8 @@ const Profile: FC = () => {
       })
       .catch((error) => {
         const { data } = error.response;
-        MySwal.fire({
+        Swal.fire({
+          icon: "error",
           title: "Failed",
           text: data.message,
           showCancelButton: false,
@@ -98,10 +101,11 @@ const Profile: FC = () => {
   }
 
   const handleDelete = () => {
-    MySwal.fire({
-      title: "Warning Danger Zone !!",
-      text: "Are you sure to Delete ?",
+    Swal.fire({
+      icon: "warning",
+      title: "Are you sure to Delete ?",
       showCancelButton: true,
+      showConfirmButton: true,
     }).then((result) => {
       if (result.isConfirmed) {
         axios
@@ -112,9 +116,9 @@ const Profile: FC = () => {
           })
           .then((response) => {
             const { message } = response.data;
-            MySwal.fire({
-              title: "Success",
-              text: message,
+            Swal.fire({
+              icon: "success",
+              title: message,
               showCancelButton: false,
             }).then((result) => {
               if (result.isConfirmed) {
@@ -126,7 +130,8 @@ const Profile: FC = () => {
           })
           .catch((error) => {
             const { data } = error.response;
-            MySwal.fire({
+            Swal.fire({
+              icon: "error",
               title: "Failed",
               text: data.message,
               showCancelButton: false,

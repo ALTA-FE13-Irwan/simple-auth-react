@@ -6,26 +6,37 @@ import {
   MdSunny,
 } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import { FC, useContext, useState } from "react";
+import withReactContent from "sweetalert2-react-content"; // cara lain untuk sweet alert
 import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
-import { FC, useContext, useState } from "react";
+import Swal from "sweetalert2";
 
 import { RootState } from "@/utils/types/redux";
 import { ThemeContext } from "@/utils/context";
+// import Swal from "@/utils/swal";
 
 export const MyNavbar: FC = () => {
   const { uname } = useSelector((state: RootState) => state.data);
   const { theme, setTheme } = useContext(ThemeContext);
   const [showMenu, setShowMenu] = useState<boolean>(false);
+
   const [, , removeCookie] = useCookies();
   const navigate = useNavigate();
+  // const MySwal = withReactContent(Swal);
 
   const handleLogout = () => {
-    if (confirm("Are You Sure to Logout ?")) {
-      removeCookie("tkn");
-      removeCookie("uname");
-      navigate("/");
-    }
+    Swal.fire({
+      title: "Are you sure to logout",
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeCookie("tkn");
+        removeCookie("uname");
+        Swal.fire("Logout", "", "success");
+        navigate("/");
+      }
+    });
   };
 
   const handleTheme = (mode: string) => {

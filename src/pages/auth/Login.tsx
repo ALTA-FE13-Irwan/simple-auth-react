@@ -1,4 +1,5 @@
 import { FC, FormEvent, useState, useEffect } from "react";
+import withReactContent from "sweetalert2-react-content";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
@@ -8,6 +9,7 @@ import { Input } from "@/components/Input";
 import { useTitle } from "@/utils/hooks";
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
+import Swal from "@/utils/swal";
 
 const Login: FC = () => {
   const [objSubmit, setObjSubmit] = useState<LoginFormData>({
@@ -17,6 +19,7 @@ const Login: FC = () => {
   const [isEmpty, setIsEmpty] = useState(true);
   const navigate = useNavigate();
   const [, setCookie] = useCookies();
+  const MySwal = withReactContent(Swal);
   useTitle("Login | User Management");
 
   useEffect(() => {
@@ -27,7 +30,11 @@ const Login: FC = () => {
     event.preventDefault();
 
     if (objSubmit.username === "" || objSubmit.password === "") {
-      alert("Please enter your username and password.");
+      MySwal.fire({
+        title: "Not completed",
+        text: "Please fill all input",
+        showCancelButton: false,
+      });
       return;
     }
 
@@ -35,14 +42,25 @@ const Login: FC = () => {
       .post("login", objSubmit)
       .then((response) => {
         const { data, message } = response.data;
-        // console.log(data);
-        setCookie("tkn", data.token);
-        setCookie("uname", data.username);
-        alert(message);
-        navigate("/");
+        MySwal.fire({
+          title: "Success",
+          text: message,
+          showCancelButton: false,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setCookie("tkn", data.token);
+            setCookie("uname", data.username);
+            navigate("/");
+          }
+        });
       })
       .catch((error) => {
-        alert(error.toString());
+        const { data } = error.response;
+        MySwal.fire({
+          title: "Failed",
+          text: data.message,
+          showCancelButton: false,
+        });
       })
       .finally(() => {});
   };

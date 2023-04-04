@@ -4,21 +4,19 @@ import {
   Navigate,
 } from "react-router-dom";
 import { FC, useState, useMemo, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 
-import Home from "@/pages";
-import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
-import Profile from "@/pages/Profile";
 import { NotFound } from "@/pages/NotFound";
+import Login from "@/pages/auth/Login";
+import Profile from "@/pages/Profile";
+import Home from "@/pages";
 
 import { handleAuth } from "@/utils/redux/reducer/reducer";
 import { ThemeContext } from "@/utils/context";
 
-// axios.defaults.baseURL =
-//   "https://virtserver.swaggerhub.com/devanada/hells-kitchen/1.1.0";
 axios.defaults.baseURL = "https://hells-kitchen.onrender.com/api/v1";
 
 const Router: FC = () => {

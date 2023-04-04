@@ -1,12 +1,12 @@
 import { FC, useState, useEffect } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
-import { useTitle, useFetchGet } from "@/utils/hooks";
 import { UserType } from "@/utils/types/user";
+import Loading from "@/components/Loading";
+import { useTitle } from "@/utils/hooks";
 import Layout from "@/components/Layout";
 import MyCard from "@/components/MyCard";
-import Loading from "@/components/Loading";
 
 const Home: FC = () => {
   // constructor
@@ -45,7 +45,7 @@ const Home: FC = () => {
           datas.map((data) => {
             return (
               <MyCard
-                key={data.id} // <~~ wajib ada sebagai pengenal satu sama lain
+                key={data.id}
                 first_name={data.first_name}
                 last_name={data.last_name}
                 username={data.username}

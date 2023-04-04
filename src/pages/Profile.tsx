@@ -2,6 +2,8 @@ import { FC, FormEvent, useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import withReactContent from "sweetalert2-react-content";
+import { useCookies } from "react-cookie";
 
 import { MyProfile } from "@/components/MyProfile";
 import { RootState } from "@/utils/types/redux";
@@ -11,27 +13,27 @@ import Loading from "@/components/Loading";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import { Fobidden } from "@/components/Alert";
+import Swal from "@/utils/swal";
 
 const Profile: FC = () => {
-  const [data, setData] = useState<Partial<UserEdit>>({});
   const [objSubmit, setObjSubmit] = useState<Partial<UserEdit>>({});
+  const [data, setData] = useState<Partial<UserEdit>>({});
   const [loading, setLoading] = useState<boolean>(true);
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const params = useParams();
-  const isLoggedIn = useSelector((state: RootState) => state.data.isLoggedIn);
+
   const { token, uname } = useSelector((state: RootState) => state.data);
 
+  const [, , removeCookie] = useCookies();
+  const MySwal = withReactContent(Swal);
   const navigate = useNavigate();
+  const params = useParams();
 
-  console.log(uname);
-  // Side Effect
   useEffect(() => {
     fetchData();
   }, []);
 
   function fetchData() {
     const { username } = params;
-    console.log(params);
     axios
       .get(`users/${username}`)
       .then((response) => {
@@ -40,7 +42,12 @@ const Profile: FC = () => {
         document.title = `${data.username} | User Management`; // cara lain title document selain hook
       })
       .catch((error) => {
-        alert(error.toString());
+        const { data } = error.response;
+        MySwal.fire({
+          title: "Failed",
+          text: data.message,
+          showCancelButton: false,
+        });
       })
       .finally(() => setLoading(false));
   }
@@ -67,20 +74,70 @@ const Profile: FC = () => {
         },
       })
       .then((response) => {
-        const { data } = response;
-        alert(data.message);
-        setIsEdit(false);
+        const { message } = response.data;
+        MySwal.fire({
+          title: "Success",
+          text: message,
+          showCancelButton: false,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            setIsEdit(false);
+            setObjSubmit({});
+          }
+        });
+      })
+      .catch((error) => {
+        const { data } = error.response;
+        MySwal.fire({
+          title: "Failed",
+          text: data.message,
+          showCancelButton: false,
+        });
       })
       .finally(() => fetchData());
   }
 
-  const handleEditMode = () => {
-    setIsEdit(!isEdit);
+  const handleDelete = () => {
+    MySwal.fire({
+      title: "Warning Danger Zone !!",
+      text: "Are you sure to Delete ?",
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete("/users", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((response) => {
+            const { message } = response.data;
+            MySwal.fire({
+              title: "Success",
+              text: message,
+              showCancelButton: false,
+            }).then((result) => {
+              if (result.isConfirmed) {
+                removeCookie("tkn");
+                removeCookie("uname");
+                navigate("/");
+              }
+            });
+          })
+          .catch((error) => {
+            const { data } = error.response;
+            MySwal.fire({
+              title: "Failed",
+              text: data.message,
+              showCancelButton: false,
+            });
+          });
+      }
+    });
   };
 
-  const handleAlert = () => {
-    alert("you cannot access othe profile detail");
-    navigate("/");
+  const handleEditMode = () => {
+    setIsEdit(!isEdit);
   };
 
   const showProfile = () => {
@@ -92,6 +149,7 @@ const Profile: FC = () => {
         last_name={data.last_name}
         username={data.username}
         onClick={handleEditMode}
+        onClick2={handleDelete}
         modal={
           <label
             htmlFor="my-modal-3"
@@ -99,6 +157,15 @@ const Profile: FC = () => {
             id="edit"
           >
             EDIT
+          </label>
+        }
+        modal2={
+          <label
+            htmlFor="my-modal-3"
+            className=" ml-2 h-full border-none btn px-12 bg-gradient-to-r from-rose-400 to-red-500 hover:-translate-y-0.5 hover:scale-105 hover:drop-shadow-md duration-300 hover:bg-gradient-to-t from-blue-500 to-cyan-400 text-slate-50 uppercase font-bold mt-2 mb-2 p-3 w-full text-base tracking-wider"
+            id="edit"
+          >
+            DELETE
           </label>
         }
       />
@@ -128,7 +195,6 @@ const Profile: FC = () => {
                     className="w-44 h-44 rounded-full"
                   />
                 </div>
-
                 <form onSubmit={(event) => handleSubmit(event)}>
                   <input
                     id="img-input"

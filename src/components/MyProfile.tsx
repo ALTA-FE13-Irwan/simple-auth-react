@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 
 interface Props {
   image: any;
@@ -7,10 +7,21 @@ interface Props {
   username?: string;
   onClick: any;
   modal: any;
+  onClick2: any;
+  modal2: any;
 }
 
 export const MyProfile: FC<Props> = (props) => {
-  const { image, first_name, last_name, username, onClick, modal } = props;
+  const {
+    image,
+    first_name,
+    last_name,
+    username,
+    onClick,
+    onClick2,
+    modal,
+    modal2,
+  } = props;
   return (
     <div>
       <div className="card card-compact md:card-side bg-slate-50 dark:bg-slate-800 shadow-xl text-slate-900 dark:text-slate-50">
@@ -41,9 +52,9 @@ export const MyProfile: FC<Props> = (props) => {
             <img src="/twitter.png" alt="" className="w-10" />
             <img src="/instagram.png" alt="" className="w-10" />
           </div>
-
           <div className="card-actions">
             <label onClick={onClick}>{modal}</label>
+            <label onClick={onClick2}>{modal2}</label>
           </div>
         </div>
       </div>

@@ -14,11 +14,9 @@ import { RootState } from "@/utils/types/redux";
 import { ThemeContext } from "@/utils/context";
 
 export const MyNavbar: FC = () => {
-  const { isLoggedIn, uname } = useSelector((state: RootState) => state.data);
-
+  const { uname } = useSelector((state: RootState) => state.data);
   const { theme, setTheme } = useContext(ThemeContext);
   const [showMenu, setShowMenu] = useState<boolean>(false);
-
   const [, , removeCookie] = useCookies();
   const navigate = useNavigate();
 
@@ -32,7 +30,6 @@ export const MyNavbar: FC = () => {
 
   const handleTheme = (mode: string) => {
     setTheme(mode);
-    console.log(mode);
   };
 
   const handleShowMenu = () => {
@@ -113,7 +110,7 @@ export const MyNavbar: FC = () => {
                     {theme} Mode
                   </button>
                 </li>
-                {isLoggedIn && (
+                {uname && (
                   <li>
                     <button
                       className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"
@@ -127,7 +124,7 @@ export const MyNavbar: FC = () => {
                     </button>
                   </li>
                 )}
-                {isLoggedIn ? (
+                {uname ? (
                   <li>
                     <button
                       onClick={() => {

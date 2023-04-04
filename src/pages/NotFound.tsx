@@ -1,4 +1,4 @@
-import React, { FC, Component, ReactNode } from "react";
+import { FC } from "react";
 
 export const NotFound: FC = () => {
   return (

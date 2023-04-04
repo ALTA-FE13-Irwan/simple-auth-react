@@ -1,6 +1,6 @@
 import { FC, FormEvent, useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useParams, Navigate } from "react-router-dom";
+import { useParams, Navigate, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import { MyProfile } from "@/components/MyProfile";
@@ -10,6 +10,7 @@ import { Input } from "@/components/Input";
 import Loading from "@/components/Loading";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
+import { Fobidden } from "@/components/Alert";
 
 const Profile: FC = () => {
   const [data, setData] = useState<Partial<UserEdit>>({});
@@ -18,8 +19,11 @@ const Profile: FC = () => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const params = useParams();
   const isLoggedIn = useSelector((state: RootState) => state.data.isLoggedIn);
+  const { token, uname } = useSelector((state: RootState) => state.data);
+
   const navigate = useNavigate();
 
+  console.log(uname);
   // Side Effect
   useEffect(() => {
     fetchData();
@@ -27,6 +31,7 @@ const Profile: FC = () => {
 
   function fetchData() {
     const { username } = params;
+    console.log(params);
     axios
       .get(`users/${username}`)
       .then((response) => {
@@ -58,6 +63,7 @@ const Profile: FC = () => {
       .put("users", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
@@ -70,6 +76,11 @@ const Profile: FC = () => {
 
   const handleEditMode = () => {
     setIsEdit(!isEdit);
+  };
+
+  const handleAlert = () => {
+    alert("you cannot access othe profile detail");
+    navigate("/");
   };
 
   const showProfile = () => {
@@ -164,6 +175,7 @@ const Profile: FC = () => {
                   <Input
                     id="handle-password"
                     placeholder="Password"
+                    type="password"
                     defaultValue={data.password}
                     onChange={(event) =>
                       handleChange(event.target.value, "password")
@@ -191,10 +203,14 @@ const Profile: FC = () => {
         )}
         {loading ? (
           <Loading />
-        ) : isLoggedIn ? (
+        ) : uname === params.username ? (
           showProfile()
         ) : (
-          <Navigate to="/" />
+          <Fobidden
+            message="forbidden to acces other user detail"
+            label="Back to main menu"
+            handleClick={() => navigate("/")}
+          />
         )}
       </div>
     </Layout>

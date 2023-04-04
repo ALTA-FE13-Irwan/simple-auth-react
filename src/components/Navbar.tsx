@@ -118,7 +118,7 @@ export const MyNavbar: FC = () => {
                     <button
                       className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"
                       onClick={() => {
-                        navigate("/profile/testing");
+                        navigate(`/profile/${uname}`);
                         handleShowMenu();
                       }}
                     >

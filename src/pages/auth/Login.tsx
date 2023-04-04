@@ -3,13 +3,14 @@ import withReactContent from "sweetalert2-react-content";
 import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 import { LoginFormData } from "@/utils/types/user";
 import { Input } from "@/components/Input";
 import { useTitle } from "@/utils/hooks";
 import Button from "@/components/Button";
 import Layout from "@/components/Layout";
-import Swal from "@/utils/swal";
+// import Swal from "@/utils/swal";
 
 const Login: FC = () => {
   const [objSubmit, setObjSubmit] = useState<LoginFormData>({
@@ -19,7 +20,7 @@ const Login: FC = () => {
   const [isEmpty, setIsEmpty] = useState(true);
   const navigate = useNavigate();
   const [, setCookie] = useCookies();
-  const MySwal = withReactContent(Swal);
+  // const MySwal = withReactContent(Swal);
   useTitle("Login | User Management");
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const Login: FC = () => {
     event.preventDefault();
 
     if (objSubmit.username === "" || objSubmit.password === "") {
-      MySwal.fire({
+      Swal.fire({
         title: "Not completed",
         text: "Please fill all input",
         showCancelButton: false,
@@ -42,9 +43,10 @@ const Login: FC = () => {
       .post("login", objSubmit)
       .then((response) => {
         const { data, message } = response.data;
-        MySwal.fire({
-          title: "Success",
-          text: message,
+        Swal.fire({
+          icon: "success",
+          title: message,
+          showConfirmButton: true,
           showCancelButton: false,
         }).then((result) => {
           if (result.isConfirmed) {
@@ -56,7 +58,8 @@ const Login: FC = () => {
       })
       .catch((error) => {
         const { data } = error.response;
-        MySwal.fire({
+        Swal.fire({
+          icon: 'error'
           title: "Failed",
           text: data.message,
           showCancelButton: false,

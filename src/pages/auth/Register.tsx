@@ -1,7 +1,7 @@
 import React, { FC, FormEvent, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
 
 import { RegisterFormData } from "@/utils/types/user";
 import { Input } from "@/components/Input";
@@ -9,7 +9,7 @@ import { useTitle } from "@/utils/hooks";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
-import Swal from "@/utils/swal";
+// import Swal from "@/utils/swal";
 
 const Register: FC = () => {
   const [objSubmit, setObjSubmit] = useState<RegisterFormData>({
@@ -20,7 +20,7 @@ const Register: FC = () => {
   });
   const [isEmpty, setIsEmpty] = useState(true);
   const navigate = useNavigate();
-  const MySwal = withReactContent(Swal);
+  // const MySwal = withReactContent(Swal);
 
   useTitle("Register | User Management");
 
@@ -37,7 +37,7 @@ const Register: FC = () => {
       objSubmit.first_name === "" ||
       objSubmit.last_name === ""
     ) {
-      MySwal.fire({
+      Swal.fire({
         title: "Not completed",
         text: "Please fill all input",
         showCancelButton: false,
@@ -49,10 +49,11 @@ const Register: FC = () => {
       .post("register", objSubmit)
       .then((response) => {
         const { data, message } = response.data;
-        MySwal.fire({
-          title: "Success",
-          text: message,
+        Swal.fire({
+          icon: "success",
+          title: message,
           showCancelButton: false,
+          showConfirmButton: true,
         }).then((result) => {
           if (result.isConfirmed) {
             navigate("/login");
@@ -61,7 +62,8 @@ const Register: FC = () => {
       })
       .catch((error) => {
         const { data } = error.response;
-        MySwal.fire({
+        Swal.fire({
+          icon: "error",
           title: "Failed",
           text: data.message,
           showCancelButton: false,

@@ -101,7 +101,7 @@ const Profile: FC = () => {
           <div>
             <input type="checkbox" id="my-modal-3" className="modal-toggle" />
             <div className="modal">
-              <div className="modal-box relative bg-slate-50">
+              <div className="modal-box relative bg-slate-50 dark:bg-slate-800">
                 <label
                   htmlFor="my-modal-3"
                   className="btn btn-sm btn-circle absolute right-2 top-2"
@@ -121,7 +121,7 @@ const Profile: FC = () => {
                 <form onSubmit={(event) => handleSubmit(event)}>
                   <input
                     id="img-input"
-                    className="file-input file-input-bordered file-input-accent  w-full bg-gradient-to-b from-slate-50 to-slate-100 mt-5 hover:drop-shadow-md "
+                    className="file-input file-input-bordered file-input-accent  w-full bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-600 dark:to-slate-800 mt-5 hover:drop-shadow-md "
                     placeholder="Select Image"
                     type="file"
                     onChange={(event) => {

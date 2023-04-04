@@ -8,7 +8,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";
-import { FC, useContext } from "react";
+import { FC, useContext, useState } from "react";
 
 import { RootState } from "@/utils/types/redux";
 import { ThemeContext } from "@/utils/context";
@@ -16,9 +16,11 @@ import { ThemeContext } from "@/utils/context";
 export const MyNavbar: FC = () => {
   const { isLoggedIn, uname } = useSelector((state: RootState) => state.data);
 
+  const { theme, setTheme } = useContext(ThemeContext);
+  const [showMenu, setShowMenu] = useState<boolean>(false);
+
   const [, , removeCookie] = useCookies();
   const navigate = useNavigate();
-  const { theme, setTheme } = useContext(ThemeContext);
 
   const handleLogout = () => {
     if (confirm("Are You Sure to Logout ?")) {
@@ -31,6 +33,10 @@ export const MyNavbar: FC = () => {
   const handleTheme = (mode: string) => {
     setTheme(mode);
     console.log(mode);
+  };
+
+  const handleShowMenu = () => {
+    setShowMenu(!showMenu);
   };
 
   return (
@@ -50,6 +56,7 @@ export const MyNavbar: FC = () => {
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
+                onClick={() => handleShowMenu()}
               >
                 <path
                   strokeLinecap="round"
@@ -59,81 +66,97 @@ export const MyNavbar: FC = () => {
                 />
               </svg>
             </label>
-            <ul
-              tabIndex={0}
-              className="menu dropdown-content p-2 drop-shadow-xl border-2 rounded-box w-52 mt-4 bg-slate-50 dark:bg-slate-800 "
-            >
-              <li className="hover-bordered ">
-                <button
-                  className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"
-                  onClick={() => navigate("/")}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                    />
-                  </svg>
-                  Homepage
-                </button>
-              </li>
-              <li className="hover-bordered">
-                <button
-                  onClick={() =>
-                    handleTheme(theme === "light" ? "dark" : "light")
-                  }
-                  id="btn-dark"
-                  className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"
-                >
-                  {theme === "dark" ? (
-                    <MdModeNight className="h-5 w-5" />
-                  ) : (
-                    <MdSunny className="h-5 w-5" />
-                  )}
-                  {theme} Mode
-                </button>
-              </li>
-              {isLoggedIn && (
-                <li>
+            {showMenu ? (
+              <ul
+                tabIndex={0}
+                className="menu dropdown-content p-2 drop-shadow-xl border-2 rounded-box w-52 mt-4 bg-slate-50 dark:bg-slate-800"
+              >
+                <li className="hover-bordered ">
                   <button
                     className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"
-                    onClick={() => navigate("/profile/testing")}
+                    onClick={() => {
+                      navigate("/");
+                      handleShowMenu();
+                    }}
                   >
-                    <MdAccountCircle className="h-5 w-5" />
-                    Profile
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                      />
+                    </svg>
+                    Homepage
                   </button>
                 </li>
-              )}
-              {isLoggedIn ? (
-                <li>
-                  <button
-                    onClick={() => handleLogout()}
-                    className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"
-                  >
-                    <MdLogout className="h-5 w-5" />
-                    Logout
-                  </button>
-                </li>
-              ) : (
                 <li className="hover-bordered">
                   <button
-                    onClick={() => navigate("/login")}
+                    onClick={() =>
+                      handleTheme(theme === "light" ? "dark" : "light")
+                    }
+                    id="btn-dark"
                     className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"
                   >
-                    <MdLogin className="h-5 w-5" />
-                    Login
+                    {theme === "dark" ? (
+                      <MdModeNight className="h-5 w-5" />
+                    ) : (
+                      <MdSunny className="h-5 w-5" />
+                    )}
+                    {theme} Mode
                   </button>
                 </li>
-              )}
-            </ul>
+                {isLoggedIn && (
+                  <li>
+                    <button
+                      className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"
+                      onClick={() => {
+                        navigate("/profile/testing");
+                        handleShowMenu();
+                      }}
+                    >
+                      <MdAccountCircle className="h-5 w-5" />
+                      Profile
+                    </button>
+                  </li>
+                )}
+                {isLoggedIn ? (
+                  <li>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        handleShowMenu();
+                      }}
+                      className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"
+                    >
+                      <MdLogout className="h-5 w-5" />
+                      Logout
+                    </button>
+                  </li>
+                ) : (
+                  <li className="hover-bordered">
+                    <button
+                      onClick={() => {
+                        navigate("/login");
+                        handleShowMenu();
+                      }}
+                      className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"
+                    >
+                      <MdLogin className="h-5 w-5" />
+                      Login
+                    </button>
+                  </li>
+                )}
+              </ul>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>

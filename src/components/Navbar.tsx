@@ -4,7 +4,7 @@ import {
   MdLogout,
   MdModeNight,
   MdSunny,
-} from "react-icons/Md";
+} from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useCookies } from "react-cookie";

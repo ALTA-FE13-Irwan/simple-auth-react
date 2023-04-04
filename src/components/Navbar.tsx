@@ -98,9 +98,10 @@ export const MyNavbar: FC = () => {
                 </li>
                 <li className="hover-bordered">
                   <button
-                    onClick={() =>
-                      handleTheme(theme === "light" ? "dark" : "light")
-                    }
+                    onClick={() => {
+                      handleTheme(theme === "light" ? "dark" : "light");
+                      handleShowMenu();
+                    }}
                     id="btn-dark"
                     className="hover:border-l-4 hover:border-sky-400 active:bg-sky-400"
                   >

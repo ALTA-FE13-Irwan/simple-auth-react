@@ -59,7 +59,7 @@ const Login: FC = () => {
       .catch((error) => {
         const { data } = error.response;
         Swal.fire({
-          icon: 'error'
+          icon: "error",
           title: "Failed",
           text: data.message,
           showCancelButton: false,

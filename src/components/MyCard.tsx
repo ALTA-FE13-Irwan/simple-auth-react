@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FC } from "react";
 
 import Button from "./Button";
-import "@/styles/MyCard.css";
+
 interface Props {
   image: string;
   first_name: string;

@@ -1,6 +1,7 @@
 import React, { FC, FormEvent, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import withReactContent from "sweetalert2-react-content";
 
 import { RegisterFormData } from "@/utils/types/user";
 import { Input } from "@/components/Input";
@@ -8,6 +9,7 @@ import { useTitle } from "@/utils/hooks";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
+import Swal from "@/utils/swal";
 
 const Register: FC = () => {
   const [objSubmit, setObjSubmit] = useState<RegisterFormData>({
@@ -18,6 +20,7 @@ const Register: FC = () => {
   });
   const [isEmpty, setIsEmpty] = useState(true);
   const navigate = useNavigate();
+  const MySwal = withReactContent(Swal);
 
   useTitle("Register | User Management");
 
@@ -34,20 +37,35 @@ const Register: FC = () => {
       objSubmit.first_name === "" ||
       objSubmit.last_name === ""
     ) {
-      alert("Please fill all required!!");
+      MySwal.fire({
+        title: "Not completed",
+        text: "Please fill all input",
+        showCancelButton: false,
+      });
       return;
     }
 
     axios
       .post("register", objSubmit)
       .then((response) => {
-        const { data } = response;
-        console.log(data);
-        alert(data.message);
-        navigate("/login");
+        const { data, message } = response.data;
+        MySwal.fire({
+          title: "Success",
+          text: message,
+          showCancelButton: false,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate("/login");
+          }
+        });
       })
       .catch((error) => {
-        alert(error.toString());
+        const { data } = error.response;
+        MySwal.fire({
+          title: "Failed",
+          text: data.message,
+          showCancelButton: false,
+        });
       })
       .finally(() => {});
   };

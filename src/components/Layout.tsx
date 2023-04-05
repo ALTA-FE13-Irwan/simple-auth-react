@@ -8,9 +8,9 @@ interface Props {
 
 const Layout: FC<Props> = (props) => {
   return (
-    <div className="static w-full h-full h-screen  bg-gradient-to-r from-cyan-500 to-blue-500 dark:bg-slate-800 ">
+    <div className="static w-full h-screen bg-gradient-to-r from-cyan-500 to-blue-500 dark:bg-slate-800 ">
       <MyNavbar />
-      <div className="bg-gradient-to-r from-cyan-500 to-blue-500 w-full h-full p-3 dark:from-cyan-900 dark:to-blue-900 pb-32">
+      <div className="bg-gradient-to-r from-cyan-500 to-blue-500 w-full p-3 dark:from-cyan-900 dark:to-blue-900 ">
         {props.children}
       </div>
     </div>

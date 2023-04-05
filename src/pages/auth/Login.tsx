@@ -70,7 +70,7 @@ const Login: FC = () => {
 
   return (
     <Layout>
-      <div className="flex justify-center pt-1 md:pt-10">
+      <div className="flex justify-center pt-1 md:pt-10 pb-16">
         <div className="w-[80%] md:w-[60%] lg:w-[40%] xl:w-[28%] bg-slate-50 dark:bg-slate-800 p-10 rounded-2xl drop-shadow-lg hover:drop-shadow-2xl hover:-translate-y-0.5 hover:scale-101 duration-300 mt-12">
           <div className="text-center mt-4">
             <img
